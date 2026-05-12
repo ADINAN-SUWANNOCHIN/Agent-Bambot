@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Environment — contains API keys
+.env
+
+# Data files — actual financial data, not part of source
+data/
+
+# Generated outputs
+reports/
+
+# ChromaDB binary store — generated at runtime, can be rebuilt
+knowledge/chroma_db/
+
+# Claude Code local workspace
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db

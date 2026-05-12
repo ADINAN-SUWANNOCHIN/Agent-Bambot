@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ═══ TITLE ═══ -->
+    <mxCell id="title" value="How the Financial Portfolio Assistant Works" style="text;html=1;fontStyle=1;fontSize=17;align=center;" vertex="1" parent="1"><mxGeometry x="50" y="18" width="800" height="36" as="geometry"/></mxCell>
+
+    <!-- ═══ STEP 1: INPUT ═══ -->
+    <mxCell id="s1" value="User types a question&#xa;Picks Module (NPL or NPA) and AI Model" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="330" y="66" width="240" height="52" as="geometry"/></mxCell>
+
+    <!-- ═══ STEP 2: LOAD DATA ═══ -->
+    <mxCell id="s2" value="Financial data tables loaded into memory&#xa;(Excel / CSV files — cached after first run)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="330" y="138" width="240" height="48" as="geometry"/></mxCell>
+    <mxCell id="a12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s1" target="s2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══ STEP 3: SEARCH KNOWLEDGE ═══ -->
+    <mxCell id="s3" value="Knowledge base searched for context&#xa;(business rules, column meanings,&#xa;query examples)" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="330" y="206" width="240" height="55" as="geometry"/></mxCell>
+    <mxCell id="a23" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s2" target="s3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══ STEP 4: CLASSIFY ═══ -->
+    <mxCell id="s4" value="Fast AI reads the question&#xa;and decides what type it is" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1"><mxGeometry x="330" y="281" width="240" height="46" as="geometry"/></mxCell>
+    <mxCell id="a34" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s3" target="s4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══ DECISION DIAMOND ═══ -->
+    <mxCell id="d1" value="What type&#xa;of question?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="400" y="345" width="100" height="58" as="geometry"/></mxCell>
+    <mxCell id="a4d" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s4" target="d1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- BRANCH A: NOT RELEVANT                          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="lA" value="Not about NPL / NPA" style="rounded=0;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=10;align=left;spacingLeft=4;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="10" y="425" width="170" height="22" as="geometry"/></mxCell>
+    <mxCell id="bA" value="System replies with a polite&#xa;rejection message in Thai" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1"><mxGeometry x="10" y="455" width="170" height="48" as="geometry"/></mxCell>
+    <mxCell id="aA_end" value="out of scope" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;" edge="1" source="d1" target="bA" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- BRANCH B: PURE ANALYSIS                         -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="lB" value="Pure Analysis" style="rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=10;align=left;spacingLeft=4;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="200" y="425" width="155" height="22" as="geometry"/></mxCell>
+    <mxCell id="bB1" value="AI explains, compares, or&#xa;reasons about the topic&#xa;using its knowledge" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="200" y="455" width="155" height="58" as="geometry"/></mxCell>
+    <mxCell id="aB" value="analytical" style="edgeStyle=orthogonalEdgeStyle;exitX=0.25;exitY=1;" edge="1" source="d1" target="bB1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- BRANCH C: DATA QUERY                            -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="lC" value="Data Query" style="rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=10;align=left;spacingLeft=4;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="375" y="425" width="170" height="22" as="geometry"/></mxCell>
+    <mxCell id="bC1" value="Decide which table to use&#xa;(auto-detect or ask AI)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="375" y="455" width="170" height="46" as="geometry"/></mxCell>
+    <mxCell id="aC" value="data query" style="edgeStyle=orthogonalEdgeStyle;exitX=0.75;exitY=1;" edge="1" source="d1" target="bC1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- BRANCH D: MIXED                                 -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="lD" value="Mixed  (Analysis + Data)" style="rounded=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=10;align=left;spacingLeft=4;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="565" y="425" width="200" height="22" as="geometry"/></mxCell>
+    <mxCell id="bD1" value="AI first explains the criteria&#xa;/ logic (streamed to user)" style="rounded=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="565" y="455" width="200" height="46" as="geometry"/></mxCell>
+    <mxCell id="bD2" value="Then decide which table&#xa;and pull the real data" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="565" y="511" width="200" height="42" as="geometry"/></mxCell>
+    <mxCell id="aD" value="mixed" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;" edge="1" source="d1" target="bD1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="aD12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="bD1" target="bD2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- MERGE: data_query + mixed → agent               -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="s5" value="Check if this is a follow-up question&#xa;(reuse previous result IDs if yes)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="330" y="578" width="240" height="48" as="geometry"/></mxCell>
+    <mxCell id="aC_s5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="bC1" target="s5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="aD2_s5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="bD2" target="s5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══ AGENT LOOP FRAME ═══ -->
+    <mxCell id="f_loop" value="AI Agent works on the question  (up to 10 rounds)" style="rounded=0;fillColor=#f5f5f5;strokeColor=#555555;fontStyle=1;fontSize=12;align=left;verticalAlign=top;spacingLeft=8;dashed=1;" vertex="1" parent="1"><mxGeometry x="200" y="644" width="500" height="318" as="geometry"/></mxCell>
+
+    <mxCell id="s6" value="Agent reviews the question,&#xa;available data, and context" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1"><mxGeometry x="260" y="664" width="220" height="48" as="geometry"/></mxCell>
+    <mxCell id="a5_s6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s5" target="s6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="d2" value="Agent&#xa;next step?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="558" y="664" width="108" height="55" as="geometry"/></mxCell>
+    <mxCell id="a6_d2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s6" target="d2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Sub-path: look up knowledge -->
+    <mxCell id="s7" value="Look up knowledge base&#xa;for more context" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="530" y="740" width="180" height="44" as="geometry"/></mxCell>
+    <mxCell id="ad2_s7" value="need context" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;" edge="1" source="d2" target="s7" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="as7_back" value="back to agent" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s7" target="s6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Sub-path: write and run code -->
+    <mxCell id="s8" value="Write a data query in code&#xa;and run it on the data" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="260" y="740" width="220" height="44" as="geometry"/></mxCell>
+    <mxCell id="ad2_s8" value="write query" style="edgeStyle=orthogonalEdgeStyle;exitX=0.3;exitY=1;" edge="1" source="d2" target="s8" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="d3" value="Worked?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="320" y="804" width="90" height="46" as="geometry"/></mxCell>
+    <mxCell id="a8_d3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s8" target="d3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ad3_retry" value="error — fix and retry (max 4x)" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=1;exitY=0.5;entryX=1;entryY=0;fontSize=10;" edge="1" source="d3" target="s8" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Done path from d2 -->
+    <mxCell id="s9" value="Result collected" style="rounded=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="305" y="872" width="220" height="36" as="geometry"/></mxCell>
+    <mxCell id="ad3_s9" value="success" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d3" target="s9" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ad2_done" value="done" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;" edge="1" source="d2" target="s9" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══ PHASE 5: PRESENT ═══ -->
+    <mxCell id="s10" value="Format results as a table&#xa;Generate a chart if data fits (2–50 rows)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="330" y="982" width="240" height="50" as="geometry"/></mxCell>
+    <mxCell id="a9_s10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s9" target="s10" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s11" value="AI writes a Thai-language summary&#xa;explaining what the numbers mean" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1"><mxGeometry x="330" y="1052" width="240" height="48" as="geometry"/></mxCell>
+    <mxCell id="a10_s11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s10" target="s11" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Analytical branch converges here -->
+    <mxCell id="aB_s11" value="direct answer" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=10;" edge="1" source="bB1" target="s11" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s12" value="Final answer shown to user:&#xa;[Reasoning trace]   [Chart]&#xa;[Data table]   [Thai analysis]" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="305" y="1120" width="290" height="62" as="geometry"/></mxCell>
+    <mxCell id="a11_s12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s11" target="s12" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══ LEGEND ═══ -->
+    <mxCell id="leg0" value="LEGEND" style="text;html=1;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="10" y="1210" width="80" height="24" as="geometry"/></mxCell>
+    <mxCell id="leg1" value="User action" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1"><mxGeometry x="10" y="1238" width="130" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg2" value="System step" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="150" y="1238" width="130" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg3" value="AI / Knowledge" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1"><mxGeometry x="290" y="1238" width="130" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg4" value="AI model call" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1"><mxGeometry x="430" y="1238" width="130" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg5" value="Key result" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1"><mxGeometry x="570" y="1238" width="130" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg6" value="──▶  forward flow" style="text;html=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="10" y="1272" width="180" height="24" as="geometry"/></mxCell>
+    <mxCell id="leg7" value="─ ─ ▶  merge / shortcut path" style="text;html=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="1272" width="220" height="24" as="geometry"/></mxCell>
+    <mxCell id="leg8" value="◇  decision / branch point" style="text;html=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="430" y="1272" width="220" height="24" as="geometry"/></mxCell>
+
+  </root>
+</mxGraphModel>

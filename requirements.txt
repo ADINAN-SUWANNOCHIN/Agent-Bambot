@@ -1,0 +1,10 @@
+openai
+google-genai
+chromadb
+pandas
+openpyxl
+pyarrow
+tabulate
+python-dotenv
+gradio
+plotly

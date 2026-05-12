@@ -1,0 +1,355 @@
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1560" pageHeight="1150" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ═══════════════════════════════════════════════════════
+         MAIN SPINE
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="100" value="&lt;b&gt;User Question&lt;/b&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;"
+      vertex="1" parent="1">
+      <mxGeometry x="623" y="20" width="155" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="101" value="RAG Retrieval&lt;br&gt;&lt;font color='#666666'&gt;ChromaDB + Gemini Embedding 2&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="612" y="90" width="178" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="102" value="Classify&lt;br&gt;&lt;font color='#996600'&gt;Groq llama-3.1-8b (fast)&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+      vertex="1" parent="1">
+      <mxGeometry x="612" y="160" width="178" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="103" value="&lt;b&gt;Query Type?&lt;/b&gt;"
+      style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+      vertex="1" parent="1">
+      <mxGeometry x="571" y="240" width="260" height="85" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         BRANCH 1: out_of_scope
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="200" value="Reject&lt;br&gt;&lt;font color='#666666'&gt;Thai out-of-scope message&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;"
+      vertex="1" parent="1">
+      <mxGeometry x="15" y="385" width="145" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         BRANCH 2: clarification
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="210" value="Ask clarifying question&lt;br&gt;&lt;font color='#666666'&gt;stream to user&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;"
+      vertex="1" parent="1">
+      <mxGeometry x="185" y="385" width="150" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         BRANCH 3: analytical
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="220" value="Stream analysis&lt;br&gt;&lt;font color='#336600'&gt;Typhoon v2.5-30b&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+      vertex="1" parent="1">
+      <mxGeometry x="365" y="385" width="155" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         BRANCH 4: mixed
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="300" value="Analyze criteria&lt;br&gt;&lt;font color='#336600'&gt;Typhoon stream&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+      vertex="1" parent="1">
+      <mxGeometry x="555" y="385" width="165" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- Agent Loop background (mixed) — must come before child boxes -->
+    <mxCell id="310bg" value="Agent Loop"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#aaaaaa;dashed=1;verticalAlign=top;fontStyle=1;fontSize=10;"
+      vertex="1" parent="1">
+      <mxGeometry x="548" y="440" width="182" height="170" as="geometry" />
+    </mxCell>
+
+    <mxCell id="311" value="Orchestrator LLM&lt;br&gt;&lt;font color='#666666'&gt;user-selected model&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="557" y="457" width="164" height="38" as="geometry" />
+    </mxCell>
+
+    <mxCell id="312" value="Specialist codegen&lt;br&gt;&lt;font color='#666666'&gt;writes pandas code&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="557" y="508" width="164" height="38" as="geometry" />
+    </mxCell>
+
+    <mxCell id="313" value="Execute (_safe_exec)&lt;br&gt;&lt;font color='#666666'&gt;pandas in sandbox&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="557" y="559" width="164" height="38" as="geometry" />
+    </mxCell>
+
+    <mxCell id="320" value="Update session&lt;br&gt;&lt;font color='#666666'&gt;last_debtor_ids · last_raw_result&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="557" y="628" width="164" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="330" value="Summarize&lt;br&gt;&lt;font color='#336600'&gt;Typhoon v2.5-30b · Thai&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+      vertex="1" parent="1">
+      <mxGeometry x="557" y="685" width="164" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         BRANCH 5: data_query
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="400" value="Pre-route&lt;br&gt;&lt;font color='#666666'&gt;deterministic Thai domain rules&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="860" y="385" width="200" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="401" value="LLM route fallback&lt;br&gt;&lt;font color='#666666'&gt;if no deterministic match&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+      vertex="1" parent="1">
+      <mxGeometry x="860" y="445" width="200" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="402" value="Follow-up classifier&lt;br&gt;&lt;font color='#666666'&gt;LLM: &amp;quot;followup&amp;quot; or &amp;quot;new&amp;quot;?&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+      vertex="1" parent="1">
+      <mxGeometry x="860" y="505" width="200" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="403" value="Follow-up export?&lt;br&gt;&lt;font color='#996600' style='font-size:10px'&gt;is_report AND is_followup&lt;br&gt;AND prev result exists&lt;/font&gt;"
+      style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+      vertex="1" parent="1">
+      <mxGeometry x="828" y="568" width="264" height="85" as="geometry" />
+    </mxCell>
+
+    <!-- Yes path: Export previous result -->
+    <mxCell id="410" value="Export previous result&lt;br&gt;&lt;font color='#666666'&gt;skip agent · save Excel&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+      vertex="1" parent="1">
+      <mxGeometry x="695" y="690" width="165" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- No path: Agent Loop background (data_query) — before child boxes -->
+    <mxCell id="420bg" value="Agent Loop"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#aaaaaa;dashed=1;verticalAlign=top;fontStyle=1;fontSize=10;"
+      vertex="1" parent="1">
+      <mxGeometry x="1063" y="678" width="195" height="170" as="geometry" />
+    </mxCell>
+
+    <mxCell id="421" value="Orchestrator LLM&lt;br&gt;&lt;font color='#666666'&gt;user-selected model&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="1072" y="695" width="178" height="38" as="geometry" />
+    </mxCell>
+
+    <mxCell id="422" value="Specialist codegen&lt;br&gt;&lt;font color='#666666'&gt;writes pandas code&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="1072" y="747" width="178" height="38" as="geometry" />
+    </mxCell>
+
+    <mxCell id="423" value="Execute (_safe_exec)&lt;br&gt;&lt;font color='#666666'&gt;pandas in sandbox&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="1072" y="799" width="178" height="38" as="geometry" />
+    </mxCell>
+
+    <mxCell id="430" value="Update session&lt;br&gt;&lt;font color='#666666'&gt;last_debtor_ids · last_raw_result&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="860" y="868" width="200" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="440" value="Try chart&lt;br&gt;&lt;font color='#666666'&gt;Plotly dark mode (auto-detect)&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#888888;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="860" y="928" width="200" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="450" value="Summarize&lt;br&gt;&lt;font color='#336600'&gt;Typhoon v2.5-30b · Thai&lt;/font&gt;"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+      vertex="1" parent="1">
+      <mxGeometry x="860" y="988" width="200" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SHARED TERMINAL
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="500" value="&lt;b&gt;Response to User&lt;/b&gt;"
+      style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;"
+      vertex="1" parent="1">
+      <mxGeometry x="623" y="1080" width="155" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EDGES: Main spine
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="e001" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="100" target="101" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e002" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="101" target="102" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e003" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="102" target="103" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EDGES: Decision branches
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="e010" value="out_of_scope" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="103" target="200" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e011" value="clarification" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="103" target="210" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e012" value="analytical" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="103" target="220" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e013" value="mixed" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="103" target="300" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e014" value="data_query" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="103" target="400" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EDGES: Mixed path
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="e020" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="300" target="311" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e021" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="311" target="312" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e022" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="312" target="313" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e023" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="313" target="320" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e024" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="320" target="330" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EDGES: Data_query path
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="e030" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="400" target="401" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e031" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="401" target="402" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e032" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="402" target="403" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e033" value="Yes" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="403" target="410" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e034" value="No" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="403" target="421" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e035" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="421" target="422" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e036" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="422" target="423" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e037" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="423" target="430" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e038" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="430" target="440" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e039" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="440" target="450" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EDGES: All terminals → Response to User
+    ═══════════════════════════════════════════════════════ -->
+
+    <mxCell id="e050" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="200" target="500" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e051" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="210" target="500" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e052" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="220" target="500" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e053" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="330" target="500" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e054" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="410" target="500" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e055" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="450" target="500" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         DATA STORES
+    ═══════════════════════════════════════════════════════ -->
+
+    <!-- Portfolio data files -->
+    <mxCell id="600" value="&lt;b&gt;Portfolio Database&lt;/b&gt;&lt;br&gt;&lt;font color='#666666'&gt;NPL / NPA&lt;br&gt;CSV · Excel → Parquet cache&lt;br&gt;(loaded to pandas DataFrames)&lt;/font&gt;"
+      style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+      vertex="1" parent="1">
+      <mxGeometry x="1350" y="700" width="185" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Knowledge base / ChromaDB -->
+    <mxCell id="601" value="&lt;b&gt;Knowledge Base&lt;/b&gt;&lt;br&gt;&lt;font color='#666666'&gt;Markdown files&lt;br&gt;→ ChromaDB vectors&lt;/font&gt;"
+      style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;"
+      vertex="1" parent="1">
+      <mxGeometry x="395" y="82" width="160" height="68" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EDGES: Data store connections (dashed = reads)
+    ═══════════════════════════════════════════════════════ -->
+
+    <!-- Knowledge base → RAG Retrieval -->
+    <mxCell id="e060" value="chunks"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;"
+      edge="1" source="601" target="101" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Portfolio DB → Execute in mixed agent loop -->
+    <mxCell id="e061" value="df / df_col / df_coll"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#6c8ebf;"
+      edge="1" source="600" target="313" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Portfolio DB → Execute in data_query agent loop -->
+    <mxCell id="e062" value="df / df_col / df_coll"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#6c8ebf;"
+      edge="1" source="600" target="423" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thai NLP Chatbot — Activity Diagram</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #f0ede6; font-family: 'Inter', sans-serif; overflow: hidden; }
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 50px;
+  background: #fdfcf8; border-bottom: 1px solid #ddd8ce;
+  display: flex; align-items: center; gap: 20px; padding: 0 22px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+header h1 { font-size: 14px; font-weight: 700; color: #17150f; }
+header p  { font-size: 11px; color: #9c9282; font-family: 'JetBrains Mono', monospace; }
+.legend { display: flex; gap: 6px; margin-left: auto; }
+.lc { font-size: 10.5px; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+.lc-ui  { background:#dbeeff; color:#1d4fa0; }
+.lc-rag { background:#d1f0e2; color:#1a6040; }
+.lc-eng { background:#ede9fe; color:#5218b0; }
+.lc-dat { background:#fef0cc; color:#8a5000; }
+#wrap {
+  position: fixed; top: 50px; left: 0; right: 0; bottom: 0; overflow: hidden; cursor: grab;
+  background: radial-gradient(ellipse at 20% 5%, #e8e4da 0%, #f0ede6 65%);
+}
+#wrap.grabbing { cursor: grabbing; }
+#canvas { position: absolute; transform-origin: 0 0; }
+.ctrls { position: fixed; bottom: 18px; right: 18px; z-index: 200; display: flex; flex-direction: column; gap: 5px; }
+.ctrl {
+  width: 32px; height: 32px; border: 1px solid #ddd8ce; background: #fdfcf8; border-radius: 7px;
+  cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08); color: #17150f; transition: box-shadow .12s, transform .1s;
+}
+.ctrl:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.13); transform: translateY(-1px); }
+.hint { position: fixed; bottom: 20px; left: 20px; z-index: 200; font-size: 10.5px; font-family: 'JetBrains Mono', monospace; color: #aaa; }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Thai NLP Chatbot — Activity Diagram</h1></div>
+  <p>Vertical swimlanes · full function coverage</p>
+  <div class="legend">
+    <span class="lc lc-ui">UI</span>
+    <span class="lc lc-rag">RAG</span>
+    <span class="lc lc-eng">Engine</span>
+    <span class="lc lc-dat">Data</span>
+  </div>
+</header>
+<div id="wrap"><div id="canvas"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg></div></div>
+<div class="ctrls">
+  <button class="ctrl" id="zi">+</button>
+  <button class="ctrl" id="zo">−</button>
+  <button class="ctrl" id="zr">⌂</button>
+</div>
+<div class="hint">scroll to zoom · drag to pan</div>
+<script>
+// ── Lane colours ────────────────────────────────────────────────────────
+const C = {
+  ui:  { bg:'#dbeeff', stroke:'#2563b8', text:'#1a3f80', label:'UI Layer',     file:'app.py'           },
+  rag: { bg:'#d1f0e2', stroke:'#16a06a', text:'#14503a', label:'RAG Layer',    file:'rag_retriever.py' },
+  eng: { bg:'#ede9fe', stroke:'#7c3aed', text:'#4a1f9a', label:'Engine Layer', file:'query_engine.py'  },
+  dat: { bg:'#fef0cc', stroke:'#d08000', text:'#6b4000', label:'Data Layer',   file:'data_loader.py'   },
+};
+
+// ── Layout ──────────────────────────────────────────────────────────────
+// 4 vertical columns
+const COLS   = { ui:185, rag:430, eng:685, dat:940 };
+const SEPS   = [307, 557, 812];   // separator x positions
+const COL_W  = 215;
+const HDR_H  = 68;
+const BX     = 1130;  // branch node centre (right of Data col, no overlap)
+const BNW    = 165;
+const SVG_W  = 1270;
+const NR     = 7;
+const DW     = 175;
+const DH     = 56;
+const GAP    = 22;
+const PADT   = HDR_H + 28;
+const INK    = '#17150f';
+const PAPER  = '#fdfcf8';
+const RED    = '#c0392b';
+const GREEN  = '#16853e';
+
+// ── Node definitions ────────────────────────────────────────────────────
+// Layer assignment rationale:
+//  ui  → app.py (Gradio handlers, yield, history convert)
+//  rag → rag_retriever.py (retrieval, embedding, ChromaDB)
+//  eng → query_engine.py (classify, route, code-gen, format, summarize)
+//  dat → data_loader.py (load_table, schema, cross-schema)
+//
+// Branch nodes that are NOT in the main SEQ use x:BX.
+// Exception: oos → UI col (yield goes to Gradio); cross_ld → Dat col (data_loader fns)
+// Both placed in their correct column without x override.
+
+const NODES = [
+  { id:'start',    type:'start',    col:'ui' },
+
+  { id:'warmup',   type:'action',   col:'ui',  h:64,
+    label:'App Startup',
+    fns:['load_table() × all TABLE_REGISTRY entries',
+         'get_modules()  ·  get_tables(module)'] },
+  { id:'user_in',  type:'event',    col:'ui',  h:42, label:'User sends message' },
+  { id:'chat',     type:'action',   col:'ui',  h:64,
+    label:'Prepare request',
+    fns:['chat()  ·  _get_text(content)',
+         '_history_messages(history)'] },
+  { id:'config',   type:'action',   col:'ui',  h:52,
+    label:'Configure provider & module',
+    fns:['set_provider(model)  ·  rag_set_module(module)'] },
+
+  // ── RAG Layer ──────────────────────────────────────────────────────
+  { id:'set_mod',  type:'action',   col:'rag', h:64,
+    label:'Reload RAG module',
+    fns:['set_module(name)  ·  _parse_md()',
+         '_load_global_chunks()  ·  _load_module_chunks()'] },
+  { id:'chroma',   type:'action',   col:'rag', h:54,
+    label:'Init ChromaDB connections',
+    fns:['_get_chroma_client()',
+         '_get_global_collection()  ·  _get_module_collection()'] },
+
+  // ── back to UI ──────────────────────────────────────────────────────
+  { id:'run_q',    type:'action',   col:'ui',  h:46,
+    label:'run_query(message, module, history)', fns:[] },
+
+  // ── RAG retrieval ───────────────────────────────────────────────────
+  { id:'retrieve', type:'action',   col:'rag', h:46,
+    label:'Retrieve knowledge context',
+    fns:['retrieve(query, n_results=6)'] },
+  { id:'embed',    type:'action',   col:'rag', h:46,
+    label:'Embed query',
+    fns:['_gemini_embed(texts)  →  float vectors'] },
+  { id:'vsearch',  type:'action',   col:'rag', h:56,
+    label:'Dual vector search',
+    fns:['_vector_search(global_col, emb, n×2)',
+         '_vector_search(module_col, emb, n×2)'] },
+  { id:'rerank',   type:'action',   col:'rag', h:66,
+    label:'Re-rank & deduplicate',
+    fns:['_tokenize(text)  ·  _keyword_score(tokens, chunk)',
+         '_chunk_id(i, chunk)',
+         '40% keyword + 60% vector  →  top n'] },
+
+  // ── Engine: classify & route ────────────────────────────────────────
+  { id:'classify', type:'action',   col:'eng', h:54,
+    label:'Classify intent',
+    fns:['_classify(question, history, rag, module)  →  _call_llm()',
+         'returns: data_query | analysis | out_of_scope'] },
+  { id:'cls_dec',  type:'decision', col:'eng', label:'qtype?' },
+
+  // ── BRANCH: out_of_scope → UI layer (yield goes back to Gradio) ─────
+  // Placed in UI column — the response is yielded to the UI layer
+  { id:'oos',      type:'action',   col:'ui',  h:58,
+    label:'Out-of-scope response',
+    fns:['_build_reasoning_accordion()',
+         'yield scope message  →  return'] },
+  { id:'oos_end',  type:'end',      col:'ui' },
+
+  { id:'pre_route',type:'action',   col:'eng', h:64,
+    label:'Route to table',
+    fns:['_pre_route(question, module, history)',
+         'Rules: TDR / province / collateral / payment / follow-up'] },
+  { id:'rte_dec',  type:'decision', col:'eng', label:'Rule matched?' },
+
+  // ── BRANCH: LLM route → Engine (still query_engine.py) ─────────────
+  { id:'llm_rte',  type:'action',   col:'eng', h:56, x:BX, bw:BNW,
+    label:'LLM routing',
+    fns:['_route_table(question, module, history, rag)',
+         '_call_llm()  ·  validate  ·  fallback → outstanding'] },
+
+  { id:'cross_dec',type:'decision', col:'eng', label:'Cross-table query?' },
+
+  // ── BRANCH: cross-table load → Data layer (data_loader.py fns) ──────
+  // Placed in Data column — load_table() and _build_cross_schema() live in data_loader.py
+  { id:'cross_ld', type:'action',   col:'dat', h:64,
+    label:'Load both tables',
+    fns:['load_table() × outstanding',
+         'load_table() × outstandingcol',
+         '_build_cross_schema(df_main, df_col)'] },
+
+  // ── Data layer: single-table path ───────────────────────────────────
+  { id:'load_tbl', type:'action',   col:'dat', h:76,
+    label:'Load table  (3-tier cache)',
+    fns:['load_table(module, table)  ·  _cache_path()',
+         '① _df_cache (memory)',
+         '② .parquet (disk)',
+         '③ _load_file()  →  concat  →  save  →  cache'] },
+  { id:'schema',   type:'action',   col:'dat', h:54,
+    label:'Build schema description',
+    fns:['get_schema_description(df)',
+         'min/max/mean · ranges · categories · 2 sample rows'] },
+
+  // ── Engine: analysis branch & code path ─────────────────────────────
+  { id:'ana_dec',  type:'decision', col:'eng', label:'qtype == analysis?' },
+
+  // ── BRANCH: analysis → Engine (query_engine.py) ─────────────────────
+  { id:'analysis', type:'action',   col:'eng', h:72, x:BX, bw:BNW,
+    label:'Analytical answer (no data)',
+    fns:['_build_analyst_schema_block(schema)',
+         '_get_analyst_system(module)',
+         '_analyze_stream()  →  _call_llm_stream()',
+         '_strip_analysis_header()  →  yield'] },
+  { id:'ana_end',  type:'end',      col:'eng', x:BX },
+
+  { id:'ctx',      type:'action',   col:'eng', h:54,
+    label:'Build execution context',
+    fns:['periods_info from df year/month values',
+         'context_hint from history'] },
+  { id:'code_sys', type:'action',   col:'eng', h:54,
+    label:'Build code-gen prompt',
+    fns:['_build_code_system(schema, module, periods_info)',
+         '_strip_cjk(text)  →  remove CJK chars'] },
+  { id:'gen_exec', type:'action',   col:'eng', h:64,
+    label:'Generate & execute pandas code',
+    fns:['_generate_and_exec(question, df, schema, …)',
+         '_call_llm_stream()  ·  _extract_code(text)',
+         'exec() in sandboxed namespace'] },
+  { id:'retry_dec',type:'decision', col:'eng', label:'Exec error?' },
+
+  // ── BRANCH: retry → Engine (query_engine.py) ────────────────────────
+  { id:'retry',    type:'action',   col:'eng', h:48, x:BX, bw:BNW,
+    label:'Retry once',
+    fns:['Pass error + original code back to LLM'] },
+
+  { id:'validate', type:'action',   col:'eng', h:56,
+    label:'Validate result',
+    fns:['_validate_result(raw_result, question)',
+         'None · empty df · large number · wrong table'] },
+  { id:'format',   type:'action',   col:'eng', h:56,
+    label:'Format raw output',
+    fns:['_format_raw_display(raw_result)',
+         'DataFrame → HTML table  ·  scalar  ·  bullets'] },
+  { id:'accord',   type:'action',   col:'eng', h:56,
+    label:'Build reasoning accordion',
+    fns:['_build_reasoning_accordion(qtype, rag, code, table, validator)',
+         'collapsible: type · table · RAG · code · warnings'] },
+
+  // ── back to UI for streaming ─────────────────────────────────────────
+  { id:'yield_r',  type:'action',   col:'ui',  h:46,
+    label:'Yield reasoning + raw result  →  Gradio', fns:[] },
+
+  // ── Engine: summarise & close ────────────────────────────────────────
+  { id:'summarize',type:'action',   col:'eng', h:66,
+    label:'Stream Thai analyst summary',
+    fns:['_build_summary_context(result, code, df)',
+         '_get_summary_system(module)',
+         '_summarize_stream()  ·  _call_llm_stream()  ·  _strip_analysis_header()'] },
+  { id:'warn',     type:'action',   col:'eng', h:44,
+    label:'Append validator warnings (if any)', fns:[] },
+  { id:'history',  type:'action',   col:'eng', h:54,
+    label:'Save to conversation history',
+    fns:['_clean_for_history(answer)  →  strip HTML',
+         'append clean answer to history list'] },
+
+  { id:'end',      type:'end',      col:'ui' },
+];
+
+// ── Sequence (main spine, ordered) ─────────────────────────────────────
+// cross_ld appears BEFORE load_tbl (YES alt); load_tbl is NO alt.
+// oos appears alongside cls_dec decision (branch in UI col).
+const SEQ = [
+  'start','warmup','user_in','chat','config',
+  'set_mod','chroma',
+  'run_q',
+  'retrieve','embed','vsearch','rerank',
+  'classify','cls_dec',
+  'pre_route','rte_dec','cross_dec',
+  'cross_ld',   // YES path (cross-table), Data col — placed before load_tbl
+  'load_tbl',   // NO path (single table),  Data col
+  'schema',
+  'ana_dec','ctx','code_sys','gen_exec','retry_dec',
+  'validate','format','accord',
+  'yield_r',
+  'summarize','warn','history',
+  'end',
+];
+
+// Arrows to SKIP in the SEQ loop (alternative-path pairs, not sequential)
+const SKIP_ARR = new Set(['cross_ld→load_tbl']);
+
+// ── Compute Y positions ─────────────────────────────────────────────────
+let curY = PADT;
+const Y = {};
+SEQ.forEach(id => {
+  const n = NODES.find(n => n.id === id);
+  Y[id] = curY;
+  if (n.type==='start'||n.type==='end') curY += 28 + GAP;
+  else if (n.type==='decision')         curY += DH + GAP;
+  else                                  curY += (n.h||54) + GAP;
+});
+const SVG_H = curY + 60;
+
+// Branch node Y (alongside their decision)
+const BRANCH_OF = {
+  cls_dec:   ['oos','oos_end'],  // oos in UI col
+  rte_dec:   ['llm_rte'],
+  ana_dec:   ['analysis','ana_end'],
+  retry_dec: ['retry'],
+};
+Object.entries(BRANCH_OF).forEach(([dec, bids]) => {
+  let by = Y[dec] + DH + GAP;
+  bids.forEach(bid => {
+    Y[bid] = by;
+    const bn = NODES.find(n=>n.id===bid);
+    by += (bn.type==='end' ? 28 : (bn.h||54)) + GAP;
+  });
+});
+
+// ── SVG setup ───────────────────────────────────────────────────────────
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('svg');
+svg.setAttribute('width', SVG_W); svg.setAttribute('height', SVG_H);
+svg.setAttribute('viewBox', `0 0 ${SVG_W} ${SVG_H}`);
+
+function el(tag, a, p) {
+  const e = document.createElementNS(NS, tag);
+  Object.entries(a).forEach(([k,v]) => e.setAttribute(k,v));
+  if (p) p.appendChild(e); return e;
+}
+function txt(s, x, y, a, p) { const e=el('text',{x,y,'text-anchor':'middle',...a},p); e.textContent=s; return e; }
+
+const defs = el('defs',{},svg);
+function mkArrow(id,col){ const m=el('marker',{id,markerWidth:'8',markerHeight:'8',refX:'7',refY:'3',orient:'auto'},defs); el('path',{d:'M0,0 L0,6 L8,3 z',fill:col},m); }
+mkArrow('am','#777'); mkArrow('ab','#aaa'); mkArrow('ar',RED); mkArrow('adb',C.dat.stroke);
+
+const g_bg  = el('g',{id:'bg'}, svg);
+const g_arr = el('g',{id:'arr'},svg);
+const g_nd  = el('g',{id:'nd'}, svg);
+
+// ── Column headers & backgrounds ────────────────────────────────────────
+Object.entries(COLS).forEach(([key, cx]) => {
+  const lc = C[key], x = cx-COL_W/2-5, w = COL_W+10;
+  el('rect',{x,y:0,width:w,height:SVG_H,fill:lc.bg,opacity:'0.12'},g_bg);
+  el('rect',{x,y:0,width:w,height:HDR_H,fill:lc.bg},g_bg);
+  el('rect',{x,y:HDR_H-2,width:w,height:2,fill:lc.stroke,opacity:'0.55'},g_bg);
+  txt(lc.label,cx,26,{'font-family':'Inter,sans-serif','font-size':'12.5','font-weight':'800',fill:lc.text,'letter-spacing':'0.04em'},g_bg);
+  txt(lc.file, cx,44,{'font-family':'JetBrains Mono,monospace','font-size':'9',fill:lc.text,opacity:'0.6'},g_bg);
+});
+SEPS.forEach(x => el('line',{x1:x,y1:0,x2:x,y2:SVG_H,stroke:'#c8c2b4','stroke-width':'1.5',opacity:'0.45'},g_bg));
+
+// ── Node helpers ────────────────────────────────────────────────────────
+function nH(n){ return n.type==='start'||n.type==='end'?28:n.type==='decision'?DH:(n.h||54); }
+function nCX(n){ return n.x||COLS[n.col]; }
+function nBot(id){ const n=NODES.find(n=>n.id===id); return [nCX(n),Y[id]+nH(n)]; }
+function nTop(id){ const n=NODES.find(n=>n.id===id); return [nCX(n),Y[id]]; }
+
+// ── Arrow utilities ─────────────────────────────────────────────────────
+function vArrow(x,y1,y2,mk,col){
+  el('line',{x1:x,y1,x2:x,y2:y2-11,stroke:col||'#777','stroke-width':'1.6','marker-end':`url(#${mk||'am'})`},g_arr);
+}
+function pathArr(d,col,mk,dash){
+  el('path',{d,fill:'none',stroke:col||'#777','stroke-width':'1.6',
+    'stroke-dasharray':dash||'none','marker-end':`url(#${mk||'am'})`},g_arr);
+}
+function lbl(x,y,text,col){
+  const w=text.length*5.6+12;
+  el('rect',{x:x-w/2,y:y-11,width:w,height:14,rx:'3',fill:PAPER,opacity:'0.93'},g_arr);
+  txt(text,x,y,{'font-family':'Inter,sans-serif','font-size':'9.5','font-weight':'700',fill:col||GREEN},g_arr);
+}
+
+// ── Draw main SEQ arrows ─────────────────────────────────────────────────
+for (let i=0; i<SEQ.length-1; i++){
+  const aId=SEQ[i], bId=SEQ[i+1];
+  if (SKIP_ARR.has(`${aId}→${bId}`)) continue;
+
+  const [x1,y1]=nBot(aId), [x2,y2]=nTop(bId);
+  if (x1===x2){ vArrow(x1,y1,y2); }
+  else {
+    // Cross-column L-shaped arrow
+    const jog=14;
+    pathArr(`M${x1} ${y1} L${x1} ${y1+jog} L${x2} ${y1+jog} L${x2} ${y2-11}`);
+  }
+}
+
+// ── Labels on selected main SEQ arrows ──────────────────────────────────
+// cross_dec → cross_ld : YES (cross-table, goes to Data col)
+{ const [,y1]=nBot('cross_dec'), [x2,]=nTop('cross_ld'); lbl((COLS.eng+x2)/2, y1+14+7, 'yes (cross-table)', C.dat.stroke); }
+// data_query/analysis label after cls_dec
+{ const [,y1]=nBot('cls_dec'); lbl(COLS.eng, y1+12, 'data_query / analysis'); }
+// matched label after rte_dec
+{ const [,y1]=nBot('rte_dec'); lbl(COLS.eng, y1+12, 'matched'); }
+// no label after ana_dec
+{ const [,y1]=nBot('ana_dec'); lbl(COLS.eng, y1+12, 'no'); }
+// no label after retry_dec
+{ const [,y1]=nBot('retry_dec'); lbl(COLS.eng, y1+12, 'no'); }
+
+// ── cross_dec NO → load_tbl bypass (skips cross_ld) ─────────────────────
+{
+  const ex = COLS.eng + DW/2;                  // right tip of cross_dec diamond
+  const ey = Y['cross_dec'] + DH/2;
+  const dx = COLS.dat;                          // Data column centre
+  const ty = Y['load_tbl'];
+  const bypassX = COLS.dat + COL_W/2 + 28;     // right of Data column
+  pathArr(`M${ex} ${ey} L${bypassX} ${ey} L${bypassX} ${ty} L${dx} ${ty-11}`,
+    C.dat.stroke, 'adb', '5 3');
+  lbl((ex+bypassX)/2, ey-7, 'no (single table)', C.dat.stroke);
+}
+
+// ── cross_ld → schema skip (bypasses load_tbl) ──────────────────────────
+{
+  const [bx,by]=nBot('cross_ld');
+  const [,sy]=nTop('schema');
+  const skipX = COLS.dat + COL_W/2 + 28;
+  pathArr(`M${bx} ${by} L${bx} ${by+8} L${skipX} ${by+8} L${skipX} ${sy} L${bx} ${sy-11}`,
+    C.dat.stroke, 'adb', '4 2');
+}
+
+// ── cls_dec → oos : LEFT arrow to UI column ──────────────────────────────
+{
+  const lx  = COLS.eng - DW/2;                 // LEFT tip of cls_dec diamond
+  const ey  = Y['cls_dec'] + DH/2;
+  const oox = COLS.ui;
+  const oty = Y['oos'];
+  pathArr(`M${lx} ${ey} L${oox} ${ey} L${oox} ${oty-11}`, RED, 'ar', '5 3');
+  lbl((lx+oox)/2, ey-7, 'out_of_scope', RED);
+}
+// oos → oos_end (straight down, UI col)
+{ const [b1,b2]=nBot('oos'); const [,t2]=nTop('oos_end'); vArrow(b1,b2,t2,'ar',RED); }
+
+// ── rte_dec → llm_rte : right to BX ──────────────────────────────────────
+{
+  const rx = COLS.eng + DW/2, ry = Y['rte_dec'] + DH/2;
+  const [tx,ty] = nTop('llm_rte');
+  pathArr(`M${rx} ${ry} L${tx} ${ry} L${tx} ${ty-11}`, '#cf8000','ab','5 3');
+  lbl((rx+tx)/2, ry-7, 'no match', '#cf8000');
+}
+// llm_rte merges back to cross_dec
+{
+  const [bx,by]=nBot('llm_rte');
+  const ym=Y['cross_dec']+DH/2;
+  pathArr(`M${bx} ${by} L${bx} ${ym} L${COLS.eng+DW/2} ${ym}`, '#cf8000','ab','4 2');
+}
+
+// ── ana_dec → analysis : right to BX ─────────────────────────────────────
+{
+  const rx=COLS.eng+DW/2, ry=Y['ana_dec']+DH/2;
+  const [tx,ty]=nTop('analysis');
+  pathArr(`M${rx} ${ry} L${tx} ${ry} L${tx} ${ty-11}`, '#7c3aed','ab','5 3');
+  lbl((rx+tx)/2, ry-7, 'yes', '#7c3aed');
+}
+{ const [b,y]=nBot('analysis'); const [,t]=nTop('ana_end'); vArrow(b,y,t,'ar','#7c3aed'); }
+
+// ── retry_dec → retry : right to BX ──────────────────────────────────────
+{
+  const rx=COLS.eng+DW/2, ry=Y['retry_dec']+DH/2;
+  const [tx,ty]=nTop('retry');
+  pathArr(`M${rx} ${ry} L${tx} ${ry} L${tx} ${ty-11}`, RED,'ar','5 3');
+  lbl((rx+tx)/2, ry-7, 'yes', RED);
+}
+// retry loops back to gen_exec right side
+{
+  const [bx,by]=nBot('retry');
+  const gn=NODES.find(n=>n.id==='gen_exec');
+  const gy=Y['gen_exec']+(gn.h||64)/2;
+  pathArr(`M${bx} ${by} L${bx} ${gy} L${COLS.eng+COL_W/2} ${gy}`, RED, 'am', '4 2');
+  txt('retry', bx+28, gy-4, {'font-family':'Inter,sans-serif','font-size':'9','font-weight':'700',fill:RED}, g_arr);
+}
+
+// ── Draw nodes ──────────────────────────────────────────────────────────
+function drawStart(n){ el('circle',{cx:nCX(n),cy:Y[n.id]+14,r:'14',fill:INK},g_nd); }
+function drawEnd(n){
+  const cx=nCX(n), cy=Y[n.id]+14;
+  el('circle',{cx,cy,r:'14',fill:'none',stroke:INK,'stroke-width':'2'},g_nd);
+  el('circle',{cx,cy,r:'7',fill:INK},g_nd);
+}
+function drawEvent(n){
+  const cy2=nCX(n), ny=Y[n.id], nh=n.h||42, x=cy2-COL_W/2, g=el('g',{},g_nd);
+  el('rect',{x,y:ny,width:COL_W,height:nh,rx:'21',fill:'#f5f2ec',stroke:'#aaa','stroke-width':'1.5','stroke-dasharray':'5 3'},g);
+  txt(n.label,cy2,ny+nh/2+5,{'font-family':'Inter,sans-serif','font-size':'11.5','font-weight':'600',fill:'#444'},g);
+}
+function drawAction(n){
+  const ny=Y[n.id], nh=n.h||54;
+  const cx=nCX(n), bw=n.bw||COL_W, x=cx-bw/2;
+  const lc=C[n.col], g=el('g',{},g_nd);
+  el('rect',{x:x+2,y:ny+2,width:bw,height:nh,rx:NR,fill:'rgba(0,0,0,0.07)'},g);
+  el('rect',{x,y:ny,width:bw,height:nh,rx:NR,fill:PAPER,stroke:lc.stroke,'stroke-width':'1.5'},g);
+  el('rect',{x,y:ny,width:5,height:nh,rx:'2',fill:lc.stroke},g);
+  const fo=el('foreignObject',{x:x+10,y:ny+7,width:bw-16,height:nh-12},g);
+  const div=document.createElementNS('http://www.w3.org/1999/xhtml','div');
+  div.style.cssText='font-family:Inter,sans-serif;overflow:hidden;height:100%;';
+  const ti=document.createElementNS('http://www.w3.org/1999/xhtml','div');
+  ti.textContent=n.label;
+  ti.style.cssText=`font-size:11px;font-weight:700;color:${lc.text};line-height:1.3;margin-bottom:2px;`;
+  div.appendChild(ti);
+  (n.fns||[]).forEach(f=>{
+    const fd=document.createElementNS('http://www.w3.org/1999/xhtml','div');
+    fd.textContent=f;
+    fd.style.cssText='font-family:JetBrains Mono,monospace;font-size:8.5px;color:#7a6e60;line-height:1.3;';
+    div.appendChild(fd);
+  });
+  fo.appendChild(div);
+}
+function drawDecision(n){
+  const ny=Y[n.id], cx=nCX(n), hw=DW/2, hh=DH/2, lc=C[n.col], g=el('g',{},g_nd);
+  el('polygon',{points:`${cx},${ny+2} ${cx+hw+2},${ny+hh+2} ${cx},${ny+DH+2} ${cx-hw+2},${ny+hh+2}`,fill:'rgba(0,0,0,0.07)'},g);
+  el('polygon',{points:`${cx},${ny} ${cx+hw},${ny+hh} ${cx},${ny+DH} ${cx-hw},${ny+hh}`,fill:lc.bg,stroke:lc.stroke,'stroke-width':'1.5'},g);
+  txt(n.label,cx,ny+hh+5,{'font-family':'Inter,sans-serif','font-size':'10.5','font-weight':'700',fill:lc.text},g);
+}
+
+NODES.forEach(n=>{
+  if(n.type==='start')    drawStart(n);
+  else if(n.type==='end') drawEnd(n);
+  else if(n.type==='event')   drawEvent(n);
+  else if(n.type==='action')  drawAction(n);
+  else if(n.type==='decision')drawDecision(n);
+});
+
+// ── Pan + Zoom ──────────────────────────────────────────────────────────
+const wrap=document.getElementById('wrap'),canvas=document.getElementById('canvas');
+let scale=0.57,tx=30,ty=20,drag=false,sx,sy,stx,sty;
+function applyT(){canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;}
+applyT();
+wrap.addEventListener('wheel',ev=>{
+  ev.preventDefault();
+  const f=ev.deltaY<0?1.1:0.91,r=wrap.getBoundingClientRect();
+  tx=(ev.clientX-r.left)-((ev.clientX-r.left)-tx)*f;
+  ty=(ev.clientY-r.top) -((ev.clientY-r.top) -ty)*f;
+  scale=Math.min(Math.max(scale*f,0.15),3);applyT();
+},{passive:false});
+wrap.addEventListener('mousedown',ev=>{drag=true;sx=ev.clientX;sy=ev.clientY;stx=tx;sty=ty;wrap.classList.add('grabbing');});
+window.addEventListener('mouseup',()=>{drag=false;wrap.classList.remove('grabbing');});
+window.addEventListener('mousemove',ev=>{if(!drag)return;tx=stx+ev.clientX-sx;ty=sty+ev.clientY-sy;applyT();});
+document.getElementById('zi').onclick=()=>{scale=Math.min(scale*1.2,3);applyT();};
+document.getElementById('zo').onclick=()=>{scale=Math.max(scale*0.83,0.15);applyT();};
+document.getElementById('zr').onclick=()=>{scale=0.57;tx=30;ty=20;applyT();};
+</script>
+</body>
+</html>

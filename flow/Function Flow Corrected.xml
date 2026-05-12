@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1330" pageHeight="4200" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- SWIMLANE HEADERS -->
+    <mxCell id="h1" value="User" style="rounded=1;whiteSpace=wrap;fillColor=#1e4d78;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="5" y="10" width="100" height="40" as="geometry"/></mxCell>
+    <mxCell id="h2" value="UI Layer (app.py)" style="rounded=1;whiteSpace=wrap;fillColor=#1e4d78;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="115" y="10" width="170" height="40" as="geometry"/></mxCell>
+    <mxCell id="h3" value="Engine Layer (query_engine.py)" style="rounded=1;whiteSpace=wrap;fillColor=#5a3a00;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="295" y="10" width="280" height="40" as="geometry"/></mxCell>
+    <mxCell id="h4" value="RAG Layer (rag_retriever.py)" style="rounded=1;whiteSpace=wrap;fillColor=#1e4d2e;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="585" y="10" width="190" height="40" as="geometry"/></mxCell>
+    <mxCell id="h5" value="Data Layer (data_loader.py)" style="rounded=1;whiteSpace=wrap;fillColor=#2d4a6e;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="785" y="10" width="180" height="40" as="geometry"/></mxCell>
+    <mxCell id="h6" value="LLM API" style="rounded=1;whiteSpace=wrap;fillColor=#5a1a1a;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="975" y="10" width="170" height="40" as="geometry"/></mxCell>
+    <mxCell id="h7" value="ChromaDB" style="rounded=1;whiteSpace=wrap;fillColor=#3d1f5e;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1155" y="10" width="165" height="40" as="geometry"/></mxCell>
+
+    <!-- LANE SEPARATORS -->
+    <mxCell id="ln1" value="" style="shape=line;strokeColor=#aaaaaa;fillColor=none;" vertex="1" parent="1"><mxGeometry x="112" y="55" width="2" height="4100" as="geometry"/></mxCell>
+    <mxCell id="ln2" value="" style="shape=line;strokeColor=#aaaaaa;fillColor=none;" vertex="1" parent="1"><mxGeometry x="292" y="55" width="2" height="4100" as="geometry"/></mxCell>
+    <mxCell id="ln3" value="" style="shape=line;strokeColor=#aaaaaa;fillColor=none;" vertex="1" parent="1"><mxGeometry x="582" y="55" width="2" height="4100" as="geometry"/></mxCell>
+    <mxCell id="ln4" value="" style="shape=line;strokeColor=#aaaaaa;fillColor=none;" vertex="1" parent="1"><mxGeometry x="782" y="55" width="2" height="4100" as="geometry"/></mxCell>
+    <mxCell id="ln5" value="" style="shape=line;strokeColor=#aaaaaa;fillColor=none;" vertex="1" parent="1"><mxGeometry x="972" y="55" width="2" height="4100" as="geometry"/></mxCell>
+    <mxCell id="ln6" value="" style="shape=line;strokeColor=#aaaaaa;fillColor=none;" vertex="1" parent="1"><mxGeometry x="1152" y="55" width="2" height="4100" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 1: INIT                                 -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="s1" value="① User types question&#xa;Picks Module (NPL/NPA) + Model" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="5" y="80" width="100" height="50" as="geometry"/></mxCell>
+    <mxCell id="s2" value="② chat()&#xa;set_provider()&#xa;_get_text()" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="115" y="80" width="170" height="50" as="geometry"/></mxCell>
+    <mxCell id="a1" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="s1" target="s2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s3" value="③ run_query(question, module, history)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="295" y="80" width="280" height="50" as="geometry"/></mxCell>
+    <mxCell id="a2" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="s2" target="s3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s4" value="④ get_tables(), get_modules()" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="155" width="280" height="38" as="geometry"/></mxCell>
+    <mxCell id="a3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s3" target="s4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s5" value="⑤ load_table(module, table)&#xa;get_schema_description(df)" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="785" y="155" width="180" height="50" as="geometry"/></mxCell>
+    <mxCell id="a4" value="load each table" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s4" target="s5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s5b" value="_load_file(), _cache_path()&#xa;CSV/Excel→Parquet→_df_cache" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="785" y="220" width="180" height="48" as="geometry"/></mxCell>
+    <mxCell id="a4b" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s5" target="s5b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s6" value="⑥ compute periods_info&#xa;from outstanding df" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="290" width="280" height="40" as="geometry"/></mxCell>
+    <mxCell id="a5" value="df returned" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s5b" target="s6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 2: RAG                                  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="f_rag" value="RAG Process" style="rounded=0;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#1e4d2e;fontStyle=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="1"><mxGeometry x="582" y="355" width="738" height="480" as="geometry"/></mxCell>
+
+    <mxCell id="s7" value="⑦ rag_retrieve(question, n_results=6)&#xa;set_module()" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="365" width="280" height="48" as="geometry"/></mxCell>
+    <mxCell id="a6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s6" target="s7" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="f_par" value="par: Load chunks (cached after first call)" style="rounded=0;whiteSpace=wrap;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;dashed=1;" vertex="1" parent="1"><mxGeometry x="588" y="375" width="188" height="100" as="geometry"/></mxCell>
+    <mxCell id="s8" value="_load_global_chunks()&#xa;_load_module_chunks()" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="592" y="392" width="180" height="42" as="geometry"/></mxCell>
+    <mxCell id="a7" value="call retrieve" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s7" target="s8" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s9" value="_parse_md(md_file, module, table)" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="592" y="448" width="180" height="36" as="geometry"/></mxCell>
+    <mxCell id="a8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s8" target="s9" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s10" value="_sync(), _chunk_id()&#xa;Check existing IDs in ChromaDB&#xa;Upsert only new chunks" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="592" y="500" width="180" height="55" as="geometry"/></mxCell>
+    <mxCell id="a9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s9" target="s10" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s11" value="_gemini_embed()&#xa;[new chunks only]" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="500" width="160" height="42" as="geometry"/></mxCell>
+    <mxCell id="a10" value="new chunks" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d7" target="s11" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s12" value="collection.upsert()&#xa;embeddings stored" style="rounded=1;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="1158" y="500" width="155" height="42" as="geometry"/></mxCell>
+    <mxCell id="a11" value="upsert" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s11" target="s12" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s13" value="_gemini_embed(query)&#xa;Embed the user question" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="568" width="160" height="42" as="geometry"/></mxCell>
+    <mxCell id="a12" value="no new chunks" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d7" target="s13" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s14" value="_vector_search()&#xa;_get_global_collection()&#xa;_get_module_collection()&#xa;_get_chroma_client()" style="rounded=1;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="1158" y="568" width="155" height="65" as="geometry"/></mxCell>
+    <mxCell id="a13" value="query vector" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s13" target="s14" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s15" value="_keyword_score(), _tokenize()&#xa;Hybrid re-rank&#xa;40% keyword + 60% vector" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="592" y="600" width="180" height="55" as="geometry"/></mxCell>
+    <mxCell id="a14" value="top docs + distances" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s14" target="s15" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s16" value="⑧ Top N chunks returned to Engine" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="670" width="280" height="38" as="geometry"/></mxCell>
+    <mxCell id="a15" value="top N chunks" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s15" target="s16" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 3: CLASSIFY                             -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="s17" value="⑨ _classify(question, history, rag_context, module)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="722" width="280" height="40" as="geometry"/></mxCell>
+    <mxCell id="a16" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s16" target="s17" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s18" value="_history_messages(history)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="776" width="280" height="36" as="geometry"/></mxCell>
+    <mxCell id="a17" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s17" target="s18" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s19" value="_call_llm(role=&quot;classify&quot;)&#xa;_resolve_provider() → llama-3.1-8b&#xa;_get_or_create_client()" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="776" width="160" height="55" as="geometry"/></mxCell>
+    <mxCell id="a18" value="classify" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s18" target="s19" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s20" value="⑩ Classification result&#xa;data_query | analytical | mixed | out_of_scope" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="295" y="835" width="280" height="48" as="geometry"/></mxCell>
+    <mxCell id="a19" value="label" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s19" target="s20" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- ALT FRAME                                        -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="f_alt" value="alt  [branch on qtype]" style="rounded=0;whiteSpace=wrap;fillColor=none;strokeColor=#333333;fontStyle=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=6;dashed=1;" vertex="1" parent="1"><mxGeometry x="5" y="905" width="1310" height="1215" as="geometry"/></mxCell>
+
+    <!-- BRANCH A: out_of_scope -->
+    <mxCell id="f_oos" value="[out_of_scope]" style="rounded=0;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;" vertex="1" parent="1"><mxGeometry x="10" y="915" width="1300" height="105" as="geometry"/></mxCell>
+    <mxCell id="s21" value="_build_reasoning_accordion()" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="935" width="280" height="36" as="geometry"/></mxCell>
+    <mxCell id="s22" value="yield rejection message" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="115" y="978" width="170" height="34" as="geometry"/></mxCell>
+    <mxCell id="a20" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s21" target="s22" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s22b" value="display" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="5" y="978" width="100" height="34" as="geometry"/></mxCell>
+    <mxCell id="a20b" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s22" target="s22b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- BRANCH B: analytical -->
+    <mxCell id="f_ana" value="[analytical]" style="rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;" vertex="1" parent="1"><mxGeometry x="10" y="1028" width="1300" height="245" as="geometry"/></mxCell>
+    <mxCell id="s23" value="_analyze_stream(question, schema, history, rag_context, module)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1045" width="280" height="38" as="geometry"/></mxCell>
+    <mxCell id="s24" value="_get_analyst_system(module)&#xa;_build_analyst_schema_block(schema)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1098" width="280" height="42" as="geometry"/></mxCell>
+    <mxCell id="a21" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s23" target="s24" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s25" value="_history_messages(history)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1155" width="280" height="36" as="geometry"/></mxCell>
+    <mxCell id="a22" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s24" target="s25" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s26" value="_call_llm_stream(role=&quot;summarize&quot;)&#xa;_resolve_provider() → Typhoon" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="1155" width="160" height="48" as="geometry"/></mxCell>
+    <mxCell id="a23" value="stream answer" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s25" target="s26" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s27" value="_strip_cjk()&#xa;_build_reasoning_accordion()&#xa;yield chunks → UI" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1220" width="280" height="46" as="geometry"/></mxCell>
+    <mxCell id="a24" value="stream chunks" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s26" target="s27" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- BRANCH C: mixed / data_query -->
+    <mxCell id="f_dq" value="[mixed / data_query]" style="rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;" vertex="1" parent="1"><mxGeometry x="10" y="1280" width="1300" height="830" as="geometry"/></mxCell>
+
+    <mxCell id="s28" value="_is_display_followup check&#xa;ขอดู/แสดง N รายแรก → reuse session.last_table" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1296" width="280" height="48" as="geometry"/></mxCell>
+    <mxCell id="s29" value="_pre_route(question, module, history)&#xa;Thai keyword match — zero LLM cost" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1395" width="280" height="46" as="geometry"/></mxCell>
+    <mxCell id="a25" value="no" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d3" target="s29" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s30" value="_route_table() [LLM fallback if pre_route=None]&#xa;_history_messages(history[-2:])" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1510" width="280" height="46" as="geometry"/></mxCell>
+    <mxCell id="a26" value="None" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d4" target="s30" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s31" value="_call_llm(role=&quot;classify&quot;)&#xa;table routing decision" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="1510" width="160" height="46" as="geometry"/></mxCell>
+    <mxCell id="a27" value="if no match" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s30" target="s31" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="a27b" value="table choice" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s31" target="s30" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s32" value="_build_followup_context(question, module, history)&#xa;Detect Thai follow-up markers: รายนี้, คนเหล่านี้..." style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="1570" width="280" height="48" as="geometry"/></mxCell>
+    <mxCell id="a28" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s30" target="s32" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s33" value="_get_session() [thread-local]&#xa;last_debtor_ids — STAYS IN ENGINE LAYER&#xa;(not Data Layer)" style="rounded=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="295" y="1632" width="280" height="50" as="geometry"/></mxCell>
+    <mxCell id="a29" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s32" target="s33" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- OPT: Mixed only -->
+    <mxCell id="f_opt" value="opt  [Mixed only: stream analyst criteria first]" style="rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;dashed=1;" vertex="1" parent="1"><mxGeometry x="285" y="1696" width="870" height="120" as="geometry"/></mxCell>
+    <mxCell id="s34" value="_analyze_stream() criteria first&#xa;_get_analyst_system()" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="295" y="1712" width="280" height="42" as="geometry"/></mxCell>
+    <mxCell id="s35" value="_call_llm_stream(role=&quot;summarize&quot;)&#xa;→ Typhoon" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="1712" width="160" height="42" as="geometry"/></mxCell>
+    <mxCell id="a30" value="stream criteria" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s34" target="s35" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s36" value="stream criteria to UI" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="115" y="1770" width="170" height="32" as="geometry"/></mxCell>
+    <mxCell id="a30b" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="s35" target="s36" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 4: AGENT LOOP                           -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="f_loop" value="loop  [max 10 iterations — _run_agent_loop()]" style="rounded=0;fillColor=#f5f5f5;strokeColor=#333333;fontStyle=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=6;dashed=1;" vertex="1" parent="1"><mxGeometry x="5" y="2030" width="1310" height="1020" as="geometry"/></mxCell>
+
+    <mxCell id="s37" value="_run_agent_loop(question, module, history,&#xa;dfs, schemas, table_hint, follow_up_context,&#xa;periods_info, rag_context)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="295" y="2048" width="280" height="58" as="geometry"/></mxCell>
+    <mxCell id="s38" value="_get_agent_tools(module)&#xa;NPL: 4 tables | NPA: 2 tables" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2120" width="280" height="42" as="geometry"/></mxCell>
+    <mxCell id="a31" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s37" target="s38" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s39" value="_clean_for_history()&#xa;Build agent message thread" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2176" width="280" height="42" as="geometry"/></mxCell>
+    <mxCell id="a32" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s38" target="s39" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s40" value="_call_llm_with_tools(role=&quot;agent&quot;)&#xa;_resolve_provider() → user-selected&#xa;_get_or_create_client()&#xa;_to_openai_messages() or&#xa;_to_gemini_contents() + _gemini_func_declarations()" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="2176" width="160" height="88" as="geometry"/></mxCell>
+    <mxCell id="a33" value="send with tools" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d6" target="s40" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="s41" value="_recover_tool_call_from_error()&#xa;[Groq 400: parse llama native&#xa;&lt;function=name{...}&gt; syntax]" style="rounded=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="295" y="2234" width="280" height="55" as="geometry"/></mxCell>
+    <mxCell id="a34" value="tool calls / 400 error" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s40" target="s41" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Tool: retrieve_knowledge -->
+    <mxCell id="f_t1" value="Tool: retrieve_knowledge (≤2x per loop)" style="rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;dashed=1;" vertex="1" parent="1"><mxGeometry x="285" y="2305" width="500" height="90" as="geometry"/></mxCell>
+    <mxCell id="s42" value="rag_retrieve(query, n_results=6)" style="rounded=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="592" y="2323" width="188" height="38" as="geometry"/></mxCell>
+    <mxCell id="a35" value="search knowledge" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d2" target="s42" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s43" value="accumulated_rag updated" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2370" width="280" height="34" as="geometry"/></mxCell>
+    <mxCell id="a36" value="chunks" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s42" target="s43" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Tool: generate_and_run -->
+    <mxCell id="f_t2" value="Tool: generate_and_run (≤4x per loop)" style="rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=2;fontSize=10;align=left;verticalAlign=top;spacingLeft=4;dashed=1;" vertex="1" parent="1"><mxGeometry x="285" y="2418" width="870" height="510" as="geometry"/></mxCell>
+
+    <mxCell id="s44" value="_get_codegen_schema(table, dfs, schemas, module)&#xa;_build_cross_schema() [if outstanding+outstandingcol]" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2436" width="280" height="50" as="geometry"/></mxCell>
+    <mxCell id="s45" value="_generate_code(intent, schema, module,&#xa;periods_info, follow_up_context,&#xa;error_hint, rag_context, original_question)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2500" width="280" height="58" as="geometry"/></mxCell>
+    <mxCell id="a37" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s44" target="s45" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s46" value="_build_codegen_system(schema, module, periods_info)&#xa;Full schema + pandas rules + period filter" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2572" width="280" height="48" as="geometry"/></mxCell>
+    <mxCell id="a38" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s45" target="s46" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s47" value="_call_llm(role=&quot;codegen&quot;)&#xa;Original question as ground truth&#xa;_resolve_provider() → user-selected" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="2572" width="160" height="58" as="geometry"/></mxCell>
+    <mxCell id="a39" value="gen code" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s46" target="s47" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s48" value="_extract_code(raw)&#xa;Pull ```python block" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2644" width="280" height="40" as="geometry"/></mxCell>
+    <mxCell id="a40" value="raw code" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s47" target="s48" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s49" value="_safe_exec(code, dfs, primary_table)&#xa;Sandboxed pandas exec&#xa;Returns (result_str, raw, result_df)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2698" width="280" height="55" as="geometry"/></mxCell>
+    <mxCell id="a41" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s48" target="s49" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s50" value="_get_session() — inject _prev_ids into exec scope&#xa;STAYS IN ENGINE LAYER (not Data Layer)" style="rounded=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="295" y="2766" width="280" height="48" as="geometry"/></mxCell>
+    <mxCell id="a42" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s49" target="s50" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s51" value="last_error_hint set on ERROR&#xa;agent retries with error_hint (up to 4x)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="2866" width="280" height="42" as="geometry"/></mxCell>
+    <mxCell id="a43" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s50" target="d5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Tool: finish -->
+    <mxCell id="s52" value="Tool: finish → break loop" style="rounded=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="295" y="2968" width="280" height="40" as="geometry"/></mxCell>
+    <mxCell id="s52b" value="_log(tag, **fields)&#xa;used throughout all steps" style="rounded=1;whiteSpace=wrap;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="980" y="2968" width="160" height="40" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 5: POST-LOOP                            -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="s53" value="⑪ _update_session(result, module, table)&#xa;_get_session() — save last_debtor_ids&#xa;for next follow-up query" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3075" width="280" height="55" as="geometry"/></mxCell>
+    <mxCell id="s54" value="⑫ _try_make_chart(raw_result, question)&#xa;Plotly bar chart: Series or 2-col DF, 2–50 rows&#xa;CDN-embedded HTML fragment" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3145" width="280" height="55" as="geometry"/></mxCell>
+    <mxCell id="a44" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s53" target="s54" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s55" value="⑬ _format_raw_display(raw_result)&#xa;_df_to_html() — styled HTML table&#xa;max 100 rows shown" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3215" width="280" height="55" as="geometry"/></mxCell>
+    <mxCell id="a45" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s54" target="s55" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 6: SUMMARIZE                            -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="s56" value="⑭ _summarize_stream(question, raw_result,&#xa;code, history, rag_ctx, module, result_df)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3290" width="280" height="50" as="geometry"/></mxCell>
+    <mxCell id="a46" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s55" target="s56" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s57" value="_build_summary_context(raw, code, result_df)&#xa;_get_summary_system(module)" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3355" width="280" height="45" as="geometry"/></mxCell>
+    <mxCell id="a47" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s56" target="s57" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s58" value="_history_messages(history[-2:])" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3414" width="280" height="36" as="geometry"/></mxCell>
+    <mxCell id="a48" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s57" target="s58" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s59" value="_call_llm_stream(role=&quot;summarize&quot;)&#xa;_resolve_provider() → Typhoon&#xa;_get_or_create_client()" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="980" y="3414" width="160" height="58" as="geometry"/></mxCell>
+    <mxCell id="a49" value="stream Thai analysis" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s58" target="s59" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s60" value="_strip_cjk()&#xa;_strip_analysis_header()" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="295" y="3488" width="280" height="40" as="geometry"/></mxCell>
+    <mxCell id="a50" value="stream chunks" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="s59" target="s60" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s61" value="⑮ _build_reasoning_accordion(tool_trace, rag_ctx,&#xa;qtype, table_hint, classify_provider, agent_provider)&#xa;Called for ALL query types" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="295" y="3544" width="280" height="58" as="geometry"/></mxCell>
+    <mxCell id="a51" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s60" target="s61" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION 7: FINAL OUTPUT                         -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <mxCell id="s62" value="⑯ yield final output&#xa;reasoning accordion + chart + raw data + Thai analysis" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="115" y="3625" width="170" height="52" as="geometry"/></mxCell>
+    <mxCell id="a52" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s61" target="s62" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="s63" value="⑰ Display answer" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="5" y="3625" width="100" height="52" as="geometry"/></mxCell>
+    <mxCell id="a53" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s62" target="s63" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- FOOTER HEADERS (repeat at bottom for long diagram) -->
+    <mxCell id="fh1" value="User" style="rounded=1;whiteSpace=wrap;fillColor=#1e4d78;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="5" y="3700" width="100" height="36" as="geometry"/></mxCell>
+    <mxCell id="fh2" value="UI Layer (app.py)" style="rounded=1;whiteSpace=wrap;fillColor=#1e4d78;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="115" y="3700" width="170" height="36" as="geometry"/></mxCell>
+    <mxCell id="fh3" value="Engine Layer (query_engine.py)" style="rounded=1;whiteSpace=wrap;fillColor=#5a3a00;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="295" y="3700" width="280" height="36" as="geometry"/></mxCell>
+    <mxCell id="fh4" value="RAG Layer (rag_retriever.py)" style="rounded=1;whiteSpace=wrap;fillColor=#1e4d2e;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="585" y="3700" width="190" height="36" as="geometry"/></mxCell>
+    <mxCell id="fh5" value="Data Layer (data_loader.py)" style="rounded=1;whiteSpace=wrap;fillColor=#2d4a6e;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="785" y="3700" width="180" height="36" as="geometry"/></mxCell>
+    <mxCell id="fh6" value="LLM API" style="rounded=1;whiteSpace=wrap;fillColor=#5a1a1a;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="975" y="3700" width="170" height="36" as="geometry"/></mxCell>
+    <mxCell id="fh7" value="ChromaDB" style="rounded=1;whiteSpace=wrap;fillColor=#3d1f5e;fontColor=#ffffff;strokeColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1155" y="3700" width="165" height="36" as="geometry"/></mxCell>
+
+    <!-- COLOR LEGEND -->
+    <mxCell id="leg0" value="LEGEND" style="text;html=1;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="5" y="3760" width="100" height="24" as="geometry"/></mxCell>
+    <mxCell id="leg1" value="Engine step" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="5" y="3788" width="120" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg2" value="RAG step" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1"><mxGeometry x="135" y="3788" width="120" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg3" value="Data Layer step" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1"><mxGeometry x="265" y="3788" width="120" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg4" value="LLM API call" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1"><mxGeometry x="395" y="3788" width="120" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg5" value="ChromaDB" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1"><mxGeometry x="525" y="3788" width="120" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg6" value="WARNING / Fixed bug" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="655" y="3788" width="150" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg7" value="─ ─ ▶  return / response back" style="text;html=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="815" y="3788" width="200" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg8" value="——▶  call / forward flow" style="text;html=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="5" y="3826" width="200" height="28" as="geometry"/></mxCell>
+    <mxCell id="leg9" value="◇  decision point (branch)" style="text;html=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="215" y="3826" width="200" height="28" as="geometry"/></mxCell>
+
+    <!-- ───── MISSING CONNECTIONS (correction pass) ──────────────── -->
+
+    <!-- Classification result → each branch (via decision diamond d1) -->
+    <mxCell id="ax1" value="out_of_scope" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d1" target="s21" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ax2" value="analytical" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d1" target="s23" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ax3" value="data_query / mixed" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d1" target="s28" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Analytical branch: yield chunks to UI -->
+    <mxCell id="s27b" value="yield analysis → UI" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="115" y="1242" width="170" height="28" as="geometry"/></mxCell>
+    <mxCell id="ax4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s27" target="s27b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Mixed only: session context → stream analyst criteria (opt frame) -->
+    <mxCell id="ax5" value="mixed: criteria first" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s33" target="s34" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Data query: session context → agent loop (direct, skip opt) -->
+    <mxCell id="ax6" value="data_query: direct" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s33" target="s37" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Mixed: after criteria streamed → enter agent loop -->
+    <mxCell id="ax7" value="then agent loop" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s36" target="s37" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Tool dispatch from d2: generate_and_run path -->
+    <mxCell id="ax8" value="generate_and_run" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d2" target="s44" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Tool dispatch from d2: finish path -->
+    <mxCell id="ax9" value="finish" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d2" target="s52" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Loopback: retrieve_knowledge result → next agent LLM call -->
+    <mxCell id="ax10" value="tool result → agent" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="s43" target="s40" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Loopback: generate_and_run result/error → retry agent LLM call -->
+    <mxCell id="ax11" value="result / retry" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="s51" target="s40" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Finish tool → exit loop → post-loop update session -->
+    <mxCell id="ax12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s52" target="s53" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ───── DECISION DIAMONDS (all 7) ──────────────────────────── -->
+
+    <!-- d1: qtype? — between s20 and alt frame, Engine lane -->
+    <mxCell id="d1" value="qtype?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="415" y="888" width="52" height="30" as="geometry"/></mxCell>
+    <mxCell id="ad1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s20" target="d1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- d2: tool? — between s41 (Groq recovery) and tool frames, Engine lane -->
+    <mxCell id="d2" value="tool?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="415" y="2293" width="52" height="30" as="geometry"/></mxCell>
+    <mxCell id="ad2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s41" target="d2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- d3: display followup? — after s28, Engine lane -->
+    <mxCell id="d3" value="display&#xa;followup?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="415" y="1348" width="52" height="34" as="geometry"/></mxCell>
+    <mxCell id="ad3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s28" target="d3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- yes: skip all routing → go directly to format -->
+    <mxCell id="ad3y" value="yes: reuse last_table" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=1;exitY=0.5;" edge="1" source="d3" target="s55" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- d4: pre_route match? — after s29, Engine lane -->
+    <mxCell id="d4" value="pre_route&#xa;match?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="415" y="1452" width="52" height="34" as="geometry"/></mxCell>
+    <mxCell id="ad4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s29" target="d4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- matched: skip LLM routing, go straight to followup context -->
+    <mxCell id="ad4y" value="matched" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;" edge="1" source="d4" target="s32" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- d5: exec error? — after s50, Engine lane -->
+    <mxCell id="d5" value="exec&#xa;error?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="415" y="2818" width="52" height="34" as="geometry"/></mxCell>
+    <!-- error: set error_hint → retry -->
+    <mxCell id="ad5e" value="error" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d5" target="s51" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- success: tool result returned → next agent LLM call -->
+    <mxCell id="ad5s" value="success" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=1;exitY=0.5;entryX=0;entryY=1;" edge="1" source="d5" target="s40" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- d6: iter < 10? — between s39 and s40, Engine lane -->
+    <mxCell id="d6" value="iter&lt;10?" style="rhombus;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="415" y="2230" width="52" height="30" as="geometry"/></mxCell>
+    <mxCell id="ad6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s39" target="d6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- max reached: exit loop directly to post-loop -->
+    <mxCell id="ad6x" value="max 10: exit" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;" edge="1" source="d6" target="s53" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- d7: chunk new? — after s10 in RAG lane -->
+    <mxCell id="d7" value="chunk&#xa;new?" style="rhombus;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=9;" vertex="1" parent="1"><mxGeometry x="612" y="558" width="52" height="30" as="geometry"/></mxCell>
+    <mxCell id="ad7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s10" target="d7" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- after upsert: s12 → s13 (embed query regardless) -->
+    <mxCell id="as12_s13" value="then embed query" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0;" edge="1" source="s12" target="s13" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+  </root>
+</mxGraphModel>
