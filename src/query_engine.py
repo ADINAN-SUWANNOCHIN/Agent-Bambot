@@ -647,33 +647,47 @@ def _route_table(question: str, module: str, history: list[dict], rag_context: s
 
 _CLASSIFIER_SYSTEM = """\
 You are a scope classifier for an NPL/NPA financial portfolio assistant.
-Classify the user question into one of four types:
+Work through the decision tree below in order. Stop at the first match.
 
-- "data_query":  needs computation -- counts, sums, rankings, filters, show/list, group by
-- "analytical":  strategy/reasoning only -- definitions, explanations, why, recommendations (no data pull)
-- "mixed":       BOTH strategic analysis AND a data pull request in the same question
-- "out_of_scope": unrelated to loans, assets, debt, finance
+STEP 1 — OUT OF SCOPE
+Is the question completely unrelated to loans, assets, debt collection, or finance?
+→ out_of_scope
 
-OVERRIDE RULES (check first, in order):
-0. CLARIFICATION FIRST — if the question has NO specific subject, metric, or filter AND is just
-   a bare "show/view/give me" request, → "clarification". Examples that must fire this rule:
-   "ขอดูหน่อย", "ขอดูตาราง", "ขอดูตรางหน่อย", "แสดงหน่อย", "give me a table", "show me something",
-   "ขอรายงาน", "อยากได้ข้อมูล", "ขอข้อมูลหน่อย".
-   A question that only says "show/view + table/data/report" with nothing else → "clarification".
-1. top, อันดับ, สูงสุด, มากที่สุด, ranking, กี่คน, จำนวน, มากกว่า → "data_query"
-   แสดง/ขอดู WITH a specific subject (e.g., แสดงลูกหนี้ที่..., ขอดูยอดหนี้ของ...) → "data_query"
-2. Which department/group has most/least → "data_query"
-3. คืออะไร, หมายความว่า, อธิบาย, explain, what is, ทำไม, why, วิธีการ → "analytical"
-3b. เอามาจากไหน, ตัวเลขนี้มาจากไหน, ทำไมถึง[number], ใช่เหรอ, แน่ใจเหรอ, คำนวณยังไง → "analytical"
-4. วิเคราะห์/แนะนำ/เลือก + ขอตัวอย่าง/สัก N ราย/แสดง N ราย → "mixed"
-   (analyst reasons about criteria first, then system pulls real matching records)
-5. วิเคราะห์/แนะนำ alone, no data pull request → "analytical"
-6. ขอตัวอย่าง/สัก N ราย/ยกตัวอย่าง alone, no analytical framing → "data_query"
-7. Truly in doubt → "data_query"
-- "clarification": question is too vague or ambiguous to execute — no clear subject, table, metric,
-  or filter. The system cannot determine what to compute or analyse.
-  CONSERVATIVE: prefer "data_query" over "clarification" when the intent is partially clear.
-  Only use "clarification" when genuinely impossible to proceed without more information.
+STEP 2 — CLARIFICATION
+Does the question have NO specific subject, metric, or filter — just a bare request with no
+actionable target? Examples: "ขอดูหน่อย", "ขอดูตาราง", "แสดงหน่อย", "ขอรายงาน",
+"give me a table", "show me something", "อยากได้ข้อมูล".
+A question that says only "show/view/give + table/data/report" with nothing else.
+→ clarification
+CONSERVATIVE: if the intent is even partially clear, skip this step and continue.
+
+STEP 3 — PRIMARY INTENT
+Ask yourself: what is the PRIMARY reason the user is asking this?
+
+A. PRIMARY intent is to UNDERSTAND, EXPLAIN, or REASON about something — no request for
+   actual data records:
+   Signals: คืออะไร / หมายความว่า / อธิบาย / ทำไม / ทำไมถึง / เพราะอะไร / explain / what is /
+            why / how does / วิธีการ / ความหมาย / เอามาจากไหน / คำนวณยังไง / แน่ใจเหรอ /
+            ใช่เหรอ / ตัวเลขนี้มาจากไหน / วิเคราะห์ (without a data pull) /
+            แนะนำ (without a data pull)
+   IMPORTANT: even if data-count words appear (จำนวน / มากที่สุด / กี่คน), if the question
+   is asking WHY or asking for an EXPLANATION, the primary intent is still analytical.
+   Example: "ทำไมถึงมีลูกหนี้ TDR จำนวนมาก" → analytical (asking why, not asking to count)
+   → analytical
+
+B. PRIMARY intent is BOTH to understand/analyze AND to get actual data records:
+   Both signals present in the SAME question:
+   - Analytical framing: วิเคราะห์ / แนะนำ / เลือก
+   - AND a data pull request: แสดง N ราย / สัก N ราย / ขอตัวอย่าง / ยกตัวอย่าง
+   → mixed
+
+C. PRIMARY intent is to COMPUTE, FILTER, COUNT, or DISPLAY actual data:
+   Signals: กี่คน / กี่ราย / จำนวน / สูงสุด / อันดับ / top / ranking / แสดง (with specific
+            filter or subject) / ขอดู (with specific subject) / มากกว่า / น้อยกว่า /
+            group by / filter / count / sum / ผลรวม / เฉลี่ย
+   → data_query
+
+D. In doubt → data_query
 
 Reply with ONLY one word: data_query, analytical, mixed, out_of_scope, or clarification\
 """
@@ -701,15 +715,17 @@ def _classify(question: str, history: list[dict], rag_context: str = "", module:
     messages = _history_messages(history)
     messages.append({"role": "user", "content": question})
     _log("CLASSIFY", question=question, module=module, history_turns=len(history))
-    label = _call_llm(_CLASSIFIER_SYSTEM + module_ctx + rag_block, messages, temperature=0.0, role="classify").strip().lower()
+    raw_label = _call_llm(_CLASSIFIER_SYSTEM + module_ctx + rag_block, messages, temperature=0.0, role="classify")
+    label = raw_label.strip().lower().split()[0].strip(".,!?;:")
+    _log("CLASSIFY raw_label", raw=raw_label.strip(), first_word=label)
     if "out_of_scope" in label:
         _log("CLASSIFY result", label="out_of_scope"); return "out_of_scope"
     if "clarification" in label:
         _log("CLASSIFY result", label="clarification"); return "clarification"
-    if "mixed" in label:
-        _log("CLASSIFY result", label="mixed"); return "mixed"
     if "analytical" in label:
         _log("CLASSIFY result", label="analytical"); return "analytical"
+    if "mixed" in label:
+        _log("CLASSIFY result", label="mixed"); return "mixed"
     _log("CLASSIFY result", label="data_query")
     return "data_query"
 
